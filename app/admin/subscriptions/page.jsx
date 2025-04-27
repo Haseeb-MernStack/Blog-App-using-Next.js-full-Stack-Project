@@ -1,8 +1,8 @@
-'use client'
+"use client";
 import React from "react";
 
-const page = () => {
+const Page = () => {
   return <div>subscriptions</div>;
 };
 
-export default page;
+export default Page;

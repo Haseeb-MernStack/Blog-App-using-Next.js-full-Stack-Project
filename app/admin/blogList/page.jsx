@@ -1,14 +1,30 @@
 "use client";
 import BlogTableItem from "@/Components/Admin/BlogTableItem";
 import axios from "axios";
+import { NextResponse } from "next/server";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const Page = () => {
   const [blogs, setBlogs] = useState([]);
 
   const fetchBlogs = async () => {
-    const response = await axios.get("/api/blog");
-    setBlogs(response.data.blogs);
+    try {
+      const response = await axios.get("/api/blog");
+      setBlogs(response.data.blogs);
+    } catch (error) {
+      NextResponse(error);
+    }
+  };
+
+  const deleteBlog = async (mongoId) => {
+    const response = await axios.delete("/api/blog", {
+      params: {
+        id: mongoId,
+      },
+    });
+    toast.success(response.data.msg);
+    fetchBlogs();
   };
 
   useEffect(() => {
@@ -37,18 +53,27 @@ const Page = () => {
             </tr>
           </thead>
           <tbody>
-            {blogs.map((item, index) => {
-              return (
-                <BlogTableItem
-                  key={index}
-                  mongoId={item._id}
-                  title={item.title}
-                  author={item.author}
-                  authorImg={item.authorImg}
-                  date={item.date}
-                />
-              );
-            })}
+            {blogs.length === 0 ? (
+              <tr>
+                <td colSpan="4" className="px-6 py-4 text-center">
+                  No blogs found
+                </td>
+              </tr>
+            ) : (
+              blogs.map((item, index) => {
+                return (
+                  <BlogTableItem
+                    key={index}
+                    mongoId={item._id}
+                    title={item.title}
+                    author={item.author}
+                    authorImg={item.authorImg}
+                    date={item.date}
+                    deleteBlog={deleteBlog}
+                  />
+                ); // ... existing map code
+              })
+            )}
           </tbody>
         </table>
       </div>

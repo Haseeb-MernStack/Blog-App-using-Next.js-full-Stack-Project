@@ -1,5 +1,6 @@
 import { assets } from "@/Assets/assets";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const Footer = () => {
@@ -10,9 +11,15 @@ const Footer = () => {
         All right reserved. Copyright @blogger
       </p>
       <div className="flex">
-        <Image src={assets.facebook_icon} alt="" width={40} />
-        <Image src={assets.twitter_icon} alt="" width={40} />
-        <Image src={assets.googleplus_icon} alt="" width={40} />
+        <Link target="_blank" href={"#"}>
+          <Image src={assets.facebook_icon} alt="" width={40} />
+        </Link>
+        <Link target="_blank" href={"#"}>
+          <Image src={assets.twitter_icon} alt="" width={40} />
+        </Link>
+        <Link target="_blank" href={"#"}>
+          <Image src={assets.googleplus_icon} alt="" width={40} />
+        </Link>
       </div>
     </div>
   );

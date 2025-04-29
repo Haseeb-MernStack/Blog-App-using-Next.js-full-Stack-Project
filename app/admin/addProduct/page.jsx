@@ -19,30 +19,33 @@ const Page = () => {
     const name = event.target.name;
     const value = event.target.value;
     setData((data) => ({ ...data, [name]: value }));
-    console.log(data);
   };
 
   const onSubmitHandler = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("title", data.title);
-    formData.append("description", data.description);
-    formData.append("category", data.category);
-    formData.append("author", data.author);
-    formData.append("authorImg", data.authorImg);
-    formData.append("image", image);
-    const response = await axios.post("/api/blog", formData);
-    if (response.data.success) {
-      toast.success(response.data.msg);
-      setImage(false);
-      setData({
-        title: "",
-        description: "",
-        category: "Startup",
-        author: "Alex Bennett",
-        authorImg: "/author_img.png",
-      });
-    } else {
+    try {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("category", data.category);
+      formData.append("author", data.author);
+      formData.append("authorImg", data.authorImg);
+      formData.append("image", image);
+      const response = await axios.post("/api/blog", formData);
+      if (response.data.success) {
+        toast.success(response.data.msg);
+        setImage(false);
+        setData({
+          title: "",
+          description: "",
+          category: "Startup",
+          author: "Alex Bennett",
+          authorImg: "/author_img.png",
+        });
+      } else {
+        toast.error("Error");
+      }
+    } catch (error) {
       toast.error("Error");
     }
   };

@@ -1,15 +1,20 @@
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 import BlogItem from "./BlogItem";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const BlogList = () => {
   const [menu, setMenu] = useState("All");
   const [blogs, setBlogs] = useState([]);
 
   const fetchBlogs = async () => {
-    const response = await axios.get("/api/blog");
-    setBlogs(response.data.blogs);
+    try {
+      const response = await axios.get("/api/blog");
+      setBlogs(response.data.blogs);
+    } catch (error) {
+      toast.error("Error");
+    }
   };
 
   useEffect(() => {
@@ -58,11 +63,17 @@ const BlogList = () => {
           Lifestyle
         </button>
       </div>
-      <div className="flex flex-wrap justify-around gap-1 gap-y-10 mb-16 xl:mx-24 ">
-        {blogs
-          .filter((item) => (menu === "All" ? true : item.category === menu))
-          .map((item, index) => {
-            return (
+      <div className="flex flex-wrap justify-around gap-1 gap-y-10 mb-16 xl:mx-24">
+        {blogs.filter((item) =>
+          menu === "All" ? true : item.category === menu
+        ).length === 0 ? (
+          <p className="text-center w-full text-gray-500 text-lg">
+            No blogs are available
+          </p>
+        ) : (
+          blogs
+            .filter((item) => (menu === "All" ? true : item.category === menu))
+            .map((item, index) => (
               <BlogItem
                 key={index}
                 image={item.image}
@@ -71,8 +82,8 @@ const BlogList = () => {
                 category={item.category}
                 id={item._id}
               />
-            );
-          })}
+            ))
+        )}
       </div>
     </div>
   );
